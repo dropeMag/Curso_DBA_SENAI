@@ -1,0 +1,96 @@
+CREATE DATABASE IF NOT EXISTS db_concessionaria
+COLLATE utf8mb4_general_ci
+CHARSET utf8mb4;
+
+USE db_concessionaria;
+
+CREATE TABLE IF NOT EXISTS tb_veiculo(
+	id_veiculo INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    id_cor INTEGER NOT NULL,
+    modelo VARCHAR(30) NOT NULL,
+    ano_fabricacao YEAR NOT NULL,
+    ano_modelo YEAR NOT NULL
+) AUTO_INCREMENT = 1000;
+
+CREATE TABLE IF NOT EXISTS tb_cor(
+	id_cor INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    cor VARCHAR(30) NOT NULL
+) AUTO_INCREMENT = 1000;
+
+ALTER TABLE tb_veiculo
+ADD CONSTRAINT fk_id_cor
+	FOREIGN KEY (id_cor)
+	REFERENCES tb_cor(id_cor);
+
+INSERT INTO tb_cor
+	(cor)
+VALUES
+	('rosa'),
+	('vermelho'),
+	('preto'),
+	('azul'),
+	('verde'),
+	('prata'),
+	('branco');
+
+INSERT INTO tb_cor
+	(cor)
+VALUES
+	(NULL);
+
+INSERT INTO tb_veiculo
+	(modelo, ano_fabricacao, ano_modelo, id_cor)
+VALUES
+	('Gol', '2010', '2010', '1002'),
+	('Gol', '2010', '2011', '1002'),
+	('Jeep Renegade', '2015', '2015', '1006'),
+	('Duster', '2013', '2014', '1005'),
+	('Palio', '2002', '2002', '1000'),
+	('Uno', '2011', '2011', '1001'),
+	('Fit', '2007', '2007', '1001'),
+	('Civic', '2017', '2017', '1003'),
+	('Celta', '2000', '2001', '1003');
+
+SELECT * FROM tb_veiculo;
+
+SELECT DISTINCT modelo FROM tb_veiculo
+WHERE ano_fabricacao >= 2007;
+
+SELECT DISTINCT id_cor FROM tb_veiculo
+WHERE ano_fabricacao BETWEEN 2010 AND 2020;
+
+SELECT * FROM tb_cor;
+SELECT COUNT(*) AS qtn_cor FROM tb_cor;
+SELECT COUNT(cor) FROM tb_cor;
+SELECT COUNT(id_cor) FROM tb_cor;
+
+ALTER TABLE tb_cor
+MODIFY cor VARCHAR(30);
+
+SELECT AVG(ano_modelo) FROM tb_veiculo;
+
+
+SELECT modelo, COUNT(modelo) FROM tb_veiculo;
+
+SELECT modelo, COUNT(modelo) AS quantidade FROM tb_veiculo
+WHERE modelo IN ('Uno', 'Civic')
+GROUP BY modelo
+HAVING quantidade < 10;
+
+
+
+USE db_discoteca;
+
+DESCRIBE tb_disco;
+
+SELECT id_gravadora, COUNT(id_gravadora) FROM tb_disco
+GROUP BY id_gravadora;
+
+SELECT COUNT(id_disco) FROM tb_disco;
+
+SELECT 
+	id_disco, 
+	COUNT(id_disco) AS musicas,
+	SUM(tempo_musica) AS tempo
+FROM tb_musica
+GROUP BY id_disco;

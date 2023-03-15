@@ -1,0 +1,47 @@
+SELECT * FROM tb_pai;
+SELECT * FROM tb_mae;
+SELECT * FROM tb_filho;
+
+SELECT 
+	tb_pai.nome,
+	tb_pai.sobrenome
+FROM db_familia.tb_pai;
+
+SELECT 
+	p.nome,
+	p.sobrenome
+FROM db_familia.tb_pai AS p;
+-- -----------------------------------------------------------------------------
+SELECT
+	f.nome, 
+    f.id_pai,
+    p.nome
+FROM tb_filho AS f
+LEFT JOIN tb_pai AS p
+	ON f.id_pai = p.id_pai
+UNION
+SELECT
+	f.nome, 
+    f.id_pai,
+    p.nome
+FROM tb_filho AS f
+RIGHT JOIN tb_pai AS p
+	ON f.id_pai = p.id_pai;
+-- -----------------------------------------------------------------------------
+DESCRIBE tb_filho;
+ALTER TABLE tb_filho
+MODIFY id_pai INT;
+-- -----------------------------------------------------------------------------
+INSERT INTO tb_filho
+	(id_filho, nome, sobrenome, dt_nascimento, id_mae)
+VALUES
+	(8, 'Johnny', 'Teste', '2021-09-12', 5);
+-- -----------------------------------------------------------------------------
+USE db_familia;
+USE db_playlist;
+SELECT
+	d.titulo_disco,
+    a.nome
+FROM tb_disco AS d
+LEFT JOIN tb_artista AS a
+	ON d.id_artista = a.id_artista;
