@@ -6,25 +6,29 @@ CHARSET utf8mb4;
 USE db_game;
 
 CREATE TABLE IF NOT EXISTS tb_jogo(
-	id_jogo INTEGER NOT NULL,
-    nome VARCHAR(35),
+	id_jogo INTEGER NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(35) NOT NULL,
 PRIMARY KEY(id_jogo),
-UNIQUE(nome)
-);
+CONSTRAINT uq_nome UNIQUE(nome)
+)AUTO_INCREMENT = 1;
 
 CREATE TABLE IF NOT EXISTS tb_console(
-	id_console INTEGER NOT NULL,
-    nome VARCHAR(35),
+	id_console INTEGER NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(35) NOT NULL,
 PRIMARY KEY(id_console),
-UNIQUE(nome)
-);
+CONSTRAINT uq_nome UNIQUE(nome)
+)AUTO_INCREMENT = 1;
 
 CREATE TABLE IF NOT EXISTS tb_jogo_console(
 	id_jogo INTEGER NOT NULL,
 	id_console INTEGER NOT NULL,
-FOREIGN KEY(id_jogo) REFERENCES tb_jogo(id_jogo),
-FOREIGN KEY(id_console) REFERENCES tb_console(id_console)
+PRIMARY KEY(id_jogo, id_console),
+CONSTRAINT fk_id_jogo FOREIGN KEY(id_jogo) REFERENCES tb_jogo(id_jogo),
+CONSTRAINT fk_id_console FOREIGN KEY(id_console) REFERENCES tb_console(id_console)
 );
+
+
+
 
 # Cadastre 6 consoles e 10 games para cada console, caso o game exista para mais de uma plataforma ele deve ser relacionado com seus respectivos consoles.
 INSERT INTO tb_console
@@ -158,6 +162,9 @@ VALUES
 	(47, 6),
 	(48, 1);
 
+
+
+
 # Realize uma consulta que mostre o nome dos jogos e do console ao qual pertence.
 SELECT
 	j.nome AS jogo,
@@ -167,6 +174,9 @@ FROM db_game.tb_jogo AS j
 		ON j.id_jogo = assoc.id_jogo
 	INNER JOIN db_game.tb_console AS c
 		ON assoc.id_console = c.id_console;
+
+
+
 
 # Realize uma consulta que mostre quantos jogos cada console possui.
 SELECT
@@ -178,6 +188,9 @@ FROM db_game.tb_console AS c
 	INNER JOIN db_game.tb_jogo AS j
 		ON assoc.id_jogo = j.id_jogo
 GROUP BY console;
+
+
+
 
 # Crie uma consulta que identifique em quantos consoles um jogo esta presente.
 SELECT 
