@@ -1,5 +1,7 @@
 # Curso de Database Administration
 
+SGBD: MySQL
+
 Previsão de termino: 2023/05/02.
 
 Este curso está sendo oferecido pelo [SENAI](https://www.sistemafibra.org.br/senai/).
