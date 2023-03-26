@@ -1,102 +1,224 @@
-CREATE DATABASE IF NOT EXISTS db_family
-COLLATE utf8mb4_general_ci
-CHARSET utf8mb4;
+/*Gravadora & Genero: 
+- não devem aceitar nomes repetidos, mesmo que escritos de formas diferentes;
+- não devem aceitar valores nulos ou em branco com menos de 2 caracteres.*/
 
-USE db_family;
+DELIMITER //
+CREATE PROCEDURE sp_insert_gravadora(gravadora VARCHAR(255))
+BEGIN
+	DECLARE nome_gravadora VARCHAR(255);
+	SET nome_gravadora = (SELECT nome FROM tb_gravadora WHERE nome = gravadora);
+    
+    IF (LOWER(nome_gravadora) = LOWER(gravadora)) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nome da gravadora já existe.';
+	ELSE
+		IF (gravadora IS NULL) OR (CHARACTER_LENGTH(REPLACE(gravadora, ' ', '')) < 2) THEN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nome para gravadora é inválido.';
+		ELSE
+			INSERT INTO tb_gravadora
+				(nome)
+			VALUE
+				(gravadora);
+        END IF;
+    END IF;
+END //
+DELIMITER ;
 
-CREATE TABLE IF NOT EXISTS tb_pai(
-	id_pai INTEGER NOT NULL AUTO_INCREMENT,
-    nome VARCHAR(30) NOT NULL,
-    sobrenome VARCHAR(80) NOT NULL,
-    dt_nascimento DATE NOT NULL,
-    nacionalidade VARCHAR(20) DEFAULT 'Brasileiro',
-PRIMARY KEY(id_pai)
-);
+CALL sp_insert_gravadora('Auctor PC');
+CALL sp_insert_gravadora('auCtOr pc');
+CALL sp_insert_gravadora(' ');
+CALL sp_insert_gravadora('         ');
+CALL sp_insert_gravadora(NULL);
+CALL sp_insert_gravadora('I');
+CALL sp_insert_gravadora('Ã');
+CALL sp_insert_gravadora('MK Music');
 
-CREATE TABLE IF NOT EXISTS tb_mae(
-	id_mae INTEGER NOT NULL AUTO_INCREMENT,
-    nome VARCHAR(30) NOT NULL,
-    sobrenome VARCHAR(80) NOT NULL,
-    dt_nascimento DATE NOT NULL,
-PRIMARY KEY(id_mae)
-);
 
-CREATE TABLE IF NOT EXISTS tb_filho(
-	id_filho INTEGER NOT NULL AUTO_INCREMENT,
-    nome VARCHAR(30) NOT NULL,
-    sobrenome VARCHAR(80) NOT NULL,
-    dt_nascimento DATE NOT NULL,
-    id_mae INTEGER NOT NULL DEFAULT 1,
-    id_pai INTEGER,
-PRIMARY KEY(id_filho),
-FOREIGN KEY(id_mae) REFERENCES tb_mae(id_mae),
-FOREIGN KEY(id_pai) REFERENCES tb_pai(id_pai)
-);
 
-CREATE TABLE IF NOT EXISTS tb_avo(
-	id_avo INTEGER NOT NULL,
-    nome VARCHAR(30),
-    id_filho INTEGER,
-PRIMARY KEY(id_avo),
-FOREIGN KEY(id_filho) REFERENCES tb_filho(id_filho)
-);
 
-INSERT INTO tb_mae
-	(id_mae, nome, sobrenome, dt_nascimento)
-VALUES
-    (1, 'Desconhecida', '-', '1111-11-11'),
-    (2, 'Marge', 'Simpson', '1956-10-23'),
-    (3, 'Shmi', 'Skywalker', '1854-04-13'),
-    (4, 'Baba', 'Yaga', '1075-09-10'),
-    (5, 'Vovó', 'Addams', '1005-11-28'),
-    (6, 'Morticia', 'Addams', '1568-03-15'),
-    (7, 'Rochelle', 'Rock', '1960-05-18'),
-    (8, 'Dona', 'Florinda', '1952-10-07'),
-    (9, 'Janet', 'Kyle', '1975-08-30');
 
-INSERT INTO tb_pai
-	(nome, sobrenome, dt_nascimento)
-VALUES
-	('Homer', 'Simpson', '1956-05-12'),
-	('Cliegg', 'Lars', '1856-09-17'),
-	('Gomes', 'Addams', '1567-05-25'),
-	('Julius', 'Rock', '1955-01-02'),
-	('Seu', 'Madruga', '1950-08-15'),
-	('Capitão', 'Federico', '1945-05-20'),
-	('Seu', 'Barriga', '1948-06-18'),
-	('Michael', 'Kyle', '1969-07-26');
 
-INSERT INTO tb_filho
-	(id_filho, nome, sobrenome, dt_nascimento, id_mae, id_pai)
-VALUES
-	(1, 'Bart', 'Simpson', '1981-04-01', 2, 1),
-	(2, 'Lisa', 'Simpson', '1981-05-09', 2, 1),
-	(3, 'Maggie', 'Simson', '1989-06-16', 2, 1),
-	(4, 'Darth', 'Vader', '1985-04-15', 3, 2),
-	(5, 'Marinka', 'Yaga', '1208-09-24', 4, NULL),
-	(6, 'Gomez', 'Addams', '1567-05-25', 5, NULL),
-	(7, 'Chico', 'Addams', '1575-09-08', 5, NULL),
-	(8, 'Itt', 'Addams', '1570-10-29', 5, NULL),
-	(9, 'Vandinha', 'Addams', '1820-09-25', 6, 3),
-	(10, 'Feioso', 'Addams', '1825-03-30', 6, 3),
-	(11, 'Pubert', 'Addams', '1830-12-25', 6, 3),
-	(12, 'Chris', 'Rock', '1970-02-02', 7, 4),
-	(13, 'Drew', 'Rock', '1972-07-16', 7, 4),
-	(14, 'Tonya', 'Rock', '1974-05-13', 7, 4),
-	(15, 'Chiquinha', 'Madruga', '1973-09-11', DEFAULT, 5),
-	(16, 'Chaves', 'do 8', '1970-01-01', DEFAULT, NULL),
-	(17, 'Quico', 'Federico', '1972-06-18', 8, 6),
-	(18, 'Ñoño', 'Barriga', '1971-12-12', DEFAULT, 7),
-	(19, 'Junior', 'Kyle', '1990-09-09', 9, 8),
-	(20, 'Claire', 'Kyle', '1995-01-31', 9, 8),
-	(21, 'Kady', 'Kyle', '1999-06-11', 9, 8);
 
-INSERT INTO tb_pai
-	(nome, sobrenome, dt_nascimento)
-VALUES
-	('Criado', 'o Peixe', '1652-11-13');
+DELIMITER //
+CREATE PROCEDURE sp_insert_genero(genero VARCHAR(255))
+BEGIN
+	DECLARE nome_genero VARCHAR(255);
+	SET nome_genero = (SELECT nome FROM tb_genero WHERE nome = genero);
+    
+    IF (LOWER(nome_genero) = LOWER(genero)) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nome do gênero já existe.';
+	ELSE
+		IF (genero IS NULL) OR (CHARACTER_LENGTH(REPLACE(genero, ' ', '')) < 2) THEN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nome para gênero é inválido.';
+		ELSE
+			INSERT INTO tb_genero
+				(nome)
+			VALUE
+				(genero);
+        END IF;
+    END IF;
+END //
+DELIMITER ;
 
-INSERT INTO tb_filho
-	(nome, sobrenome, dt_nascimento, id_mae, id_pai)
-VALUES
-	('Mega', 'Mente', '2001-08-29', DEFAULT, 9);
+CALL sp_insert_genero('Pop');
+CALL sp_insert_genero('pOP');
+CALL sp_insert_genero(' ');
+CALL sp_insert_genero('      ');
+CALL sp_insert_genero(NULL);
+CALL sp_insert_genero('O');
+CALL sp_insert_genero('Country Rock');
+CALL sp_insert_genero('Ó');
+
+
+
+
+
+
+
+/*Artista:
+- não deve aceitar nomes com valores nulos, em branco ou com menos de 3 caracteres;
+- a idade não deve aceitar nulos, brancos ou datas futuras.*/
+
+DELIMITER //
+CREATE PROCEDURE sp_insert_artista(nome_artista VARCHAR(50), idade_artista INTEGER)
+BEGIN
+	IF EXISTS (SELECT nome FROM tb_artista WHERE nome = nome_artista) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O artista já foi cadastrado.';
+	ELSE
+   		IF (nome_artista IS NULL) OR (CHARACTER_LENGTH(REPLACE(nome_artista, ' ', '')) < 3) THEN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nome para artista é inválido';
+        ELSE
+			IF (idade_artista IS NULL) OR (idade_artista < 1) THEN
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Idade inválida.';
+            ELSE
+				INSERT INTO tb_artista
+					(nome, idade)
+                VALUES
+					(nome_artista, idade_artista);
+            END IF;
+        END IF;
+	END IF;
+END //
+DELIMITER ;
+
+CALL sp_insert_artista('Hector Sanford', 23);
+CALL sp_insert_artista('hEcToR sAnFoRD', 23);
+CALL sp_insert_artista('AI', 65);
+CALL sp_insert_artista('D            Ó', 39);
+CALL sp_insert_artista('Vó', 78);
+CALL sp_insert_artista(NULL, 29);
+CALL sp_insert_artista('  ', 45);
+CALL sp_insert_artista('       ', 90);
+CALL sp_insert_artista('Unlike Pluto', 0);
+CALL sp_insert_artista('Unlike Pluto', -30);
+CALL sp_insert_artista('Unlike Pluto', NULL);
+CALL sp_insert_artista('Unlike Pluto', 31);
+
+
+
+
+
+
+
+/*Musica:
+- não devem aceitar valores nulos, em branco ou nome com menos de 2 caracteres;
+- o tempo não pode ser 0 ou negativo;
+- só podem ser aceitos discos existentes da tabela disco;
+- uma mesma música com todos os atributos iguais não deve ser possivel de cadastrar para o mesmo disco.*/
+
+DELIMITER //
+CREATE PROCEDURE sp_insert_musica(nome_musica VARCHAR(50), duracao_musica FLOAT, cod_disco INTEGER)
+BEGIN
+	IF EXISTS (SELECT nome, tempo_musica, id_disco FROM tb_musica WHERE nome = nome_musica AND tempo_musica = duracao_musica AND id_disco = cod_disco) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'A música já foi cadastrada.';
+	ELSE
+		IF (duracao_musica IS NULL) OR (duracao_musica <= 0) THEN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Valor para o tempo da musica é inválido';
+		ELSE
+			IF (cod_disco IS NULL) OR NOT EXISTS (SELECT id_disco FROM tb_disco WHERE id_disco = cod_disco) THEN
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O id_disco é inválido.';
+            ELSE
+				IF (nome_musica IS NULL) OR (CHARACTER_LENGTH(REPLACE(nome_musica, ' ', '')) < 2) THEN
+					SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O nome para música é inválido.';
+				ELSE
+					INSERT INTO tb_musica
+						(nome, tempo_musica, id_disco)
+					VALUES
+						(nome_musica, duracao_musica, cod_disco);
+				END IF;
+			END IF;
+        END IF;
+	END IF;
+END //
+DELIMITER ;
+
+CALL sp_insert_musica('Ferris Jordan', 1.25, 623);
+CALL sp_insert_musica('FeRrIs jORdAn', 1.25, 623);
+CALL sp_insert_musica('Dark Horse', 0, 623);
+CALL sp_insert_musica('Dark Horse', -3.13, 623);
+CALL sp_insert_musica('Dark Horse', NULL, 623);
+CALL sp_insert_musica('Scrubs', 3.25, 2000);
+CALL sp_insert_musica('Scrubs', 3.25, NULL);
+CALL sp_insert_musica(NULL, 3.25, 500);
+CALL sp_insert_musica('                Ó', 3.25, 500);
+CALL sp_insert_musica('The Course Of The Fould', 4.40, 10);
+
+
+
+
+
+
+
+/*Disco:
+- artistas, gravadoras, generos devem existir em suas respectivas tabelas;
+- o ano de lancamento não pode ser um ano futuro;
+- não devem aceitar títulos com valores nulos, em branco, ou com menos de 3 caracteres;
+- discos com todos os dados iguais não devem ser possiveis de cadastrar.*/
+
+DELIMITER //
+CREATE PROCEDURE sp_insert_disco(nome_disco VARCHAR(100), duracao_disco FLOAT, ano_disco YEAR, cod_artista INTEGER, cod_gravadora INTEGER, cod_genero INTEGER)
+BEGIN
+	IF EXISTS (SELECT titulo_disco, tempo_disco, ano_lancamento, id_artista, id_gravadora, id_genero FROM tb_disco 
+    WHERE titulo_disco = nome_disco AND tempo_disco = duracao_disco AND ano_lancamento = ano_disco 
+    AND id_artista = cod_artista AND id_gravadora = cod_gravadora AND id_genero = cod_genero) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O disco já está cadastrado.';
+	ELSE
+		IF (cod_artista IS NULL) OR NOT EXISTS (SELECT id_artista FROM tb_artista WHERE id_artista = cod_artista) THEN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O id_artista é inválido.';
+		ELSE
+			IF (cod_gravadora IS NULL) OR NOT EXISTS (SELECT id_gravadora FROM tb_gravadora WHERE id_gravadora = cod_gravadora) THEN
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O id_gravadora é inválido.';
+			ELSE
+				IF (cod_genero IS NULL) OR NOT EXISTS (SELECT id_genero FROM tb_genero WHERE id_genero = cod_genero) THEN
+					SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O id_genero é inválido.';
+				ELSE
+					IF (ano_disco IS NULL) OR (ano_disco >= 2024) THEN
+						SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O ano do disco é inválido.';
+					ELSE
+                        IF (nome_disco IS NULL) OR (CHARACTER_LENGTH(REPLACE(nome_disco, ' ', '')) < 3) THEN
+							SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'O nome do disco é inválido';
+						ELSE
+							INSERT INTO tb_disco
+								(titulo_disco, tempo_disco, ano_lancamento, id_artista, id_gravadora, id_genero)
+							VALUES
+								(nome_disco, duracao_disco, ano_disco, cod_artista, cod_gravadora, cod_genero);
+						END IF;
+                    END IF;
+				END IF;
+			END IF;
+		END IF;
+    END IF;
+END //
+DELIMITER ;
+
+CALL sp_insert_disco('Davis Rodgers', 61, 2009, 168, 12, 9);
+CALL sp_insert_disco('DAvIs rODgeRs', 61, 2009, 168, 12, 9);
+CALL sp_insert_disco(NULL, 61, 2009, 168, 12, 9);
+CALL sp_insert_disco('O            I', 61, 2009, 168, 12, 9);
+CALL sp_insert_disco('Teste 2', 61, 2009, 168, 12, 9999);
+CALL sp_insert_disco('Teste 2', 61, 2009, 168, 12, NULL);
+CALL sp_insert_disco('Teste 2', 61, 2009, 168, 9999, 9);
+CALL sp_insert_disco('Teste 2', 61, 2009, 168, NULL, 9);
+CALL sp_insert_disco('Teste 2', 61, 2009, 9999, 12, 9);
+CALL sp_insert_disco('Teste 2', 61, 2009, NULL, 12, 9);
+CALL sp_insert_disco('Teste 2', 61, NULL, 168, 12, 9);
+CALL sp_insert_disco('Teenage Dream', 46.44, 2010, 14, 8, 10);
