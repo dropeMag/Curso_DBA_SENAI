@@ -2,11 +2,9 @@
 
 SGBD: MySQL
 
-Previsão de termino: 2023/05/02.
+Previsão de termino: 2023/04/21.
 
-Este curso está sendo oferecido pelo [SENAI](https://www.sistemafibra.org.br/senai/).
-
-Neste repositório encontrará exercícios desenvolvidos durante o curso.
+Curso está sendo oferecido pelo [SENAI/DF](https://www.sistemafibra.org.br/senai/).
 
 # Conteúdo
 
