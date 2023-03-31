@@ -6,7 +6,9 @@ Previsão de termino: 2023/04/21.
 
 Curso está sendo oferecido pelo [SENAI/DF](https://www.sistemafibra.org.br/senai/).
 
-# Conteúdo
+</br>
+
+# :clipboard: Conteúdo
 
 ### Modelagem de Dados:
 - Entidade, Atributo e Relacionamento;
@@ -16,7 +18,11 @@ Curso está sendo oferecido pelo [SENAI/DF](https://www.sistemafibra.org.br/sena
   
 ### DDL (Data Definition Language):
 - CREATE;
-  - DB, TB e VIEW;
+  - Database & Table;
+  - View;
+  - Function;
+  - Stored Procedures;
+  - Triggers;
 - ALTER;
   - MODIFY;
   - CHANGE;
@@ -36,7 +42,21 @@ Curso está sendo oferecido pelo [SENAI/DF](https://www.sistemafibra.org.br/sena
   - JOIN;
   - UNION.
 
+</br>
 
-# Agradecimentos
+# :file_folder: Exercicios
+
+Essa pasta possui os exercícios que foram solicitados pelo docente.
+
+</br>
+
+# :file_folder: Projetos
+
+Nessa pasta incluo projetos tanto passados no curso quanto pessoais.
+O objetivo é demonstrar o meu progresso com a linguagem SQL e para por em prática os meus conhecimentos.
+
+</br>
+
+# :love_letter: Agradecimentos
 
 Gratidão ao [SENAI](https://www.sistemafibra.org.br/senai/) do DF pelo oferecimento do curso.
