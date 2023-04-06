@@ -45,6 +45,6 @@ This bk contains tables for console names and game names, an associative table t
 
 | SP | Details |
 | --- | --- |
-| sp_insert_console | Used to make insert into tb_console |
-| sp_insert_jogo | Used to make insert into tb_jogo |
-| sp_insert_jogo_console | Used to make insert into tb_jogo_console |
+| sp_insert_console | Use to make insert into tb_console |
+| sp_insert_jogo | Use to make insert into tb_jogo |
+| sp_insert_jogo_console | Use to make insert into tb_jogo_console |
