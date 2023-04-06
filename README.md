@@ -22,7 +22,6 @@ Curso está sendo oferecido pelo [SENAI/DF](https://www.sistemafibra.org.br/sena
   - View;
   - Function;
   - Stored Procedures;
-  - Triggers;
 - ALTER;
   - MODIFY;
   - CHANGE;
