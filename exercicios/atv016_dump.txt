@@ -1,0 +1,15 @@
+mysqldump -u Pedro -p --single-transaction --routines --triggers db_game > C:\Users\pedro\OneDrive\Documentos\DATABASE\CURSO\bk\bk_db_game_full_20230405.sql
+
+mysqldump -u Pedro -p --single-transaction --routines --triggers db_game --no-data > C:\Users\pedro\OneDrive\Documentos\DATABASE\CURSO\bk\bk_db_game_ddl_20230405.sql
+
+
+
+mysqldump -u Pedro -p --single-transaction --routines --triggers db_loja > C:\Users\pedro\OneDrive\Documentos\DATABASE\CURSO\bk\bk_db_loja_full_20230405.sql
+
+mysqldump -u Pedro -p --single-transaction --routines --triggers db_loja --no-data > C:\Users\pedro\OneDrive\Documentos\DATABASE\CURSO\bk\bk_db_loja_ddl_20230405.sql
+
+
+
+mysqldump -u Pedro -p --single-transaction --routines --triggers db_discoteca2 > C:\Users\pedro\OneDrive\Documentos\DATABASE\CURSO\bk\bk_db_discoteca2_full_20230405.sql
+
+mysqldump -u Pedro -p --single-transaction --routines --triggers db_discoteca2 --no-data > C:\Users\pedro\OneDrive\Documentos\DATABASE\CURSO\bk\bk_db_discoteca2_ddl_20230405.sql

@@ -1,0 +1,26 @@
+CREATE USER 'estagiario'@'localhost' IDENTIFIED BY 'est123';
+GRANT SELECT, INSERT, UPDATE ON db_game.* TO 'estagiario'@'localhost';
+
+
+
+CREATE USER 'junior'@'%' IDENTIFIED BY 'jun123';
+GRANT INSERT, SELECT, UPDATE, DELETE ON db_game.* TO 'junior'@'%';
+GRANT INSERT, SELECT, UPDATE, DELETE ON db_loja.* TO 'junior'@'%';
+GRANT INSERT, SELECT, UPDATE, DELETE ON db_discoteca2.* TO 'junior'@'%';
+
+
+
+CREATE USER 'pleno'@'%' IDENTIFIED BY 'ple123';
+GRANT INSERT, SELECT, UPDATE, DELETE, ALTER, CREATE ON db_game.* TO 'pleno'@'%';
+GRANT INSERT, SELECT, UPDATE, DELETE, ALTER, CREATE ON db_loja.* TO 'pleno'@'%';
+GRANT INSERT, SELECT, UPDATE, DELETE, ALTER, CREATE ON db_discoteca2.* TO 'pleno'@'%';
+
+
+
+CREATE USER 'senior'@'%' IDENTIFIED BY 'sen123';
+GRANT ALL ON db_game.* TO 'senior'@'%' WITH GRANT OPTION;
+GRANT ALL ON db_loja.* TO 'senior'@'%' WITH GRANT OPTION;
+GRANT ALL ON db_discoteca2.* TO 'senior'@'%' WITH GRANT OPTION;
+
+
+
